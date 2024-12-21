@@ -63,4 +63,25 @@ class Notification(models.Model):
     status = models.CharField(max_length=100, choices=[('geplant', 'Geplant'), ('versendet', 'Versendet')], default='geplant')
     sent_at = models.DateTimeField(blank=True, null=True)
 
+class StudySession(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
+    status = models.CharField(max_length=100, choices=[('geplant', 'Geplant'), ('abgeschlossen', 'Abgeschlossen')], default='geplant')
+    goal = models.ManyToManyField(Goal, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    def get_duration(self):
+        return self.end_time - self.start_time
 
+class Timeslot(models.Model):
+    title = models.CharField(max_length=100)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    study_session = models.ForeignKey(StudySession, on_delete=models.CASCADE)
+    
+    def get_duration(self):
+        return self.end_time - self.start_time  
