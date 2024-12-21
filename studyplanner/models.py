@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.core.exceptions import ValidationError
 
 class Calendar(models.Model):
     name = models.CharField(max_length=100)
@@ -56,6 +57,10 @@ class Goal(models.Model):
     habit = models.OneToOneField(Habit, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
 
+    def clean(self):
+        if self.current_value > self.target_value:
+            raise ValidationError("Aktueller Wert muss kleiner als der Zielwert sein")
+
 class Notification(models.Model):
     title = models.CharField(max_length=100)
     message = models.TextField()
@@ -75,6 +80,10 @@ class StudySession(models.Model):
     
     def get_duration(self):
         return self.end_time - self.start_time
+    
+    def clean(self):
+        if self.start_time >= self.end_time:
+            raise ValidationError("Startzeit muss vor Endzeit liegen")
 
 class Timeslot(models.Model):
     title = models.CharField(max_length=100)
@@ -84,4 +93,16 @@ class Timeslot(models.Model):
     study_session = models.ForeignKey(StudySession, on_delete=models.CASCADE)
     
     def get_duration(self):
-        return self.end_time - self.start_time  
+        return self.end_time - self.start_time
+
+    def clean(self):
+        if self.start_time >= self.end_time:
+            raise ValidationError("Startzeit muss vor Endzeit liegen")
+
+class Exam(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
+    date = models.DateField()
+    time = models.TimeField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    time_slot = models.OneToOneField(Timeslot, on_delete=models.CASCADE)
