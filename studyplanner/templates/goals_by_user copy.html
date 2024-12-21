@@ -1,0 +1,19 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks by Calendar</title>
+</head>
+<body>
+    <h1>Tasks for Calendar</h1>
+    <ul>
+        {% for goal in goals %}
+            <li>{{ goal.name }} (Status: {{ goal.status }})</li>
+        {% empty %}
+            <li>No goals found for this user.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

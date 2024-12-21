@@ -22,5 +22,6 @@ urlpatterns = [
     path('calendar/<int:calendar_id>/tasks/', views.tasks_by_calendar, name='tasks_by_calendar'),
     path('user/<int:user_id>/habits/', views.habits_by_user, name='habits_by_user'),
     path('user/<int:user_id>/goals/', views.goals_by_user, name='goals_by_user'),
+    path('user/categories/', views.categories_by_user, name='categories_by_user'),
 ]
 

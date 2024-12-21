@@ -36,7 +36,7 @@ class Task(models.Model):
     status = models.CharField(max_length=100, choices=[('offen', 'Offen'), ('in_arbeit', 'In Arbeit'), ('erledigt', 'Erledigt')], default='offen')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
 
 class Habit(models.Model):
     name = models.CharField(max_length=100)
@@ -44,7 +44,7 @@ class Habit(models.Model):
     progress = models.IntegerField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     target_value = models.IntegerField(default=0)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
 
 class Goal(models.Model):
     name = models.CharField(max_length=100)
@@ -54,5 +54,13 @@ class Goal(models.Model):
     status = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     habit = models.OneToOneField(Habit, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
+
+class Notification(models.Model):
+    title = models.CharField(max_length=100)
+    message = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.CharField(max_length=100, choices=[('geplant', 'Geplant'), ('versendet', 'Versendet')], default='geplant')
+    sent_at = models.DateTimeField(blank=True, null=True)
+
 
