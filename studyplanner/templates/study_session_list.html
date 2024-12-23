@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Sessions</title>
+</head>
+<body>
+    <h1>Study Sessions</h1>
+    <ul>
+        {% for session in study_sessions %}
+            <li>
+                <strong>{{ session.title }}</strong> ({{ session.start_time }} - {{ session.end_time }})
+                <p>{{ session.description }}</p>
+                <a href="{% url 'study_session_update' session.id %}">Bearbeiten</a> |
+                <a href="{% url 'study_session_delete' session.id %}">Löschen</a>
+            </li>
+        {% empty %}
+            <li>Keine Study Sessions gefunden.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'study_session_create' %}">Neue Study Session erstellen</a>
+</body>
+</html>

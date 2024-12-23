@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aufgabenliste</title>
+</head>
+<body>
+    <h1>Deine Aufgaben</h1>
+    <ul>
+        {% for task in task_list %}
+            <li>
+                <strong>{{ task.title }}</strong>: {{ task.description }} (Deadline: {{ task.deadline }}, Status: {{ task.status }})
+                <a href="{% url 'task_update' task.id %}">Bearbeiten</a> |
+                <a href="{% url 'task_delete' task.id %}">Löschen</a>
+            </li>
+        {% empty %}
+            <li>Keine Aufgaben gefunden.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'task_create' %}">Neue Aufgabe erstellen</a>
+</body>
+</html>

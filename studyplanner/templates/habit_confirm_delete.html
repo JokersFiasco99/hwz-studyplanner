@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habit löschen</title>
+</head>
+<body>
+    <h1>Habit löschen</h1>
+    <p>Möchtest du das Habit "{{ object.name }}" wirklich löschen?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Löschen</button>
+    </form>
+    <a href="/habits/">Abbrechen</a>
+</body>
+</html>

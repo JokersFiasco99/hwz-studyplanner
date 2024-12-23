@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ziele Übersicht</title>
+</head>
+<body>
+    <h1>Deine Ziele</h1>
+    <ul>
+        {% for goal in goal_list %}
+            <li>
+                <strong>{{ goal.name }}</strong>: {{ goal.description }}
+                (Status: {{ goal.status }}, Fortschritt: {{ goal.current_value }}/{{ goal.target_value }})
+                | <a href="{% url 'goal_update' goal.id %}">Bearbeiten</a>
+                | <a href="{% url 'goal_delete' goal.id %}">Löschen</a>
+            </li>
+        {% empty %}
+            <li>Keine Ziele gefunden.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'goal_create' %}">Neues Ziel erstellen</a>
+</body>
+</html>

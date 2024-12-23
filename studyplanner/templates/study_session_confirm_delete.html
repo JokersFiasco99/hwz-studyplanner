@@ -1,0 +1,9 @@
+<h1>Study Session löschen</h1>
+<p>Bist du sicher, dass du die folgende Study Session löschen möchtest?</p>
+<p><strong>{{ object.title }}</strong> (Start: {{ object.start_time }}, Ende: {{ object.end_time }})</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Löschen</button>
+    <a href="{% url 'study_session_list' %}">Abbrechen</a>
+</form>

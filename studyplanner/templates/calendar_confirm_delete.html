@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kalender löschen</title>
+</head>
+<body>
+    <h1>Möchtest du den Kalender "{{ object.name }}" wirklich löschen?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Löschen</button>
+        <a href="{% url 'calendar_list' %}">Abbrechen</a>
+    </form>
+</body>
+</html>

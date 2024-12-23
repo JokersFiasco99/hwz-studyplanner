@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prüfungen</title>
+</head>
+<body>
+    <h1>Prüfungen</h1>
+    <ul>
+        {% for exam in exam_list %}
+            <li>
+                <strong>{{ exam.title }}</strong>: {{ exam.description }}
+                ({{ exam.date }} um {{ exam.time }})
+                | <a href="{% url 'exam_update' exam.id %}">Bearbeiten</a>
+                | <a href="{% url 'exam_delete' exam.id %}">Löschen</a>
+            </li>
+        {% empty %}
+            <li>Keine Prüfungen gefunden.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'exam_create' %}">Neue Prüfung erstellen</a>
+</body>
+</html>

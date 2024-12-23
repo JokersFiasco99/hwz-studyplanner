@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Neue Aufgabe erstellen</title>
+</head>
+<body>
+    <h1>Neue Aufgabe erstellen</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Erstellen</button>
+    </form>
+    <a href="{% url 'calendar_list' %}">Zurück zur Kalenderliste</a>
+</body>
+</html>

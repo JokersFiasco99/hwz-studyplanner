@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ziel löschen</title>
+</head>
+<body>
+    <h1>Ziel löschen</h1>
+    <p>Möchtest du das Ziel "{{ object.name }}" wirklich löschen?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Löschen</button>
+    </form>
+    <a href="{% url 'goal_list' %}">Abbrechen</a>
+</body>
+</html>

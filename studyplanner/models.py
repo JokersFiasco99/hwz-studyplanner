@@ -35,7 +35,7 @@ class Task(models.Model):
     description = models.TextField(blank=True, null=True)
     deadline = models.DateField(blank=True, null=True)
     status = models.CharField(max_length=100, choices=[('offen', 'Offen'), ('in_arbeit', 'In Arbeit'), ('erledigt', 'Erledigt')], default='offen')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
 
@@ -43,7 +43,7 @@ class Habit(models.Model):
     name = models.CharField(max_length=100)
     status = models.BooleanField(default=False)
     progress = models.IntegerField(default=0)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     target_value = models.IntegerField(default=0)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
 
@@ -53,7 +53,7 @@ class Goal(models.Model):
     target_value = models.IntegerField(default=0)
     current_value = models.IntegerField(default=0)
     status = models.BooleanField(default=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     habit = models.OneToOneField(Habit, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
 
@@ -64,7 +64,7 @@ class Goal(models.Model):
 class Notification(models.Model):
     title = models.CharField(max_length=100)
     message = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     status = models.CharField(max_length=100, choices=[('geplant', 'Geplant'), ('versendet', 'Versendet')], default='geplant')
     sent_at = models.DateTimeField(blank=True, null=True)
 
@@ -76,7 +76,7 @@ class StudySession(models.Model):
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
     status = models.CharField(max_length=100, choices=[('geplant', 'Geplant'), ('abgeschlossen', 'Abgeschlossen')], default='geplant')
     goal = models.ManyToManyField(Goal, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     
     def get_duration(self):
         return self.end_time - self.start_time
@@ -89,7 +89,7 @@ class Timeslot(models.Model):
     title = models.CharField(max_length=100)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     study_session = models.ForeignKey(StudySession, on_delete=models.CASCADE)
     
     def get_duration(self):
@@ -104,5 +104,5 @@ class Exam(models.Model):
     description = models.TextField(blank=True, null=True)
     date = models.DateField()
     time = models.TimeField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     time_slot = models.OneToOneField(Timeslot, on_delete=models.CASCADE)
