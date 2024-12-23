@@ -41,7 +41,11 @@ class TaskCreateView(CreateView):
     model = Task
     fields = ['title', 'description', 'deadline', 'status', 'calendar', 'category']
     template_name = 'task_form.html'
-    user_id = 1
+    success_url = reverse_lazy('task_list')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 class TaskListView(ListView):
     model = Task
@@ -65,7 +69,11 @@ class HabitCreateView(CreateView):
     model = Habit
     fields = ['name', 'status', 'progress', 'target_value', 'category']
     template_name = 'habit_form.html'
-    user_id = 1
+    success_url = reverse_lazy('habit_list')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 class HabitListView(ListView):
     model = Habit
