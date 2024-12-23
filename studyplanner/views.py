@@ -8,6 +8,7 @@ class CalendarCreateView(CreateView):
     model = Calendar
     fields = ['name', 'description']
     template_name = 'calendar_form.html'
+    success_url = reverse_lazy('calendar_list')
 
     def form_valid(self, form):
         form.instance.user_id = 1
@@ -28,7 +29,7 @@ class CalendarUpdateView(UpdateView):
     model = Calendar
     fields = ['name', 'description']
     template_name = 'calendar_form.html'
-
+    success_url = reverse_lazy('calendar_list')
 class CalendarDeleteView(DeleteView):
     model = Calendar
     template_name = 'calendar_confirm_delete.html'
