@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Neues Fach erstellen</title>
+</head>
+<body>
+    <h1>Neues Fach erstellen</h1>
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            <label for="name">Name:</label>
+            <input type="text" name="name" id="name" required>
+        </p>
+        <p>
+            <label for="beschreibung">Beschreibung:</label>
+            <textarea name="beschreibung" id="beschreibung"></textarea>
+        </p>
+        <button type="submit">Erstellen</button>
+    </form>
+    <a href="{% url 'task_list' %}">Zurück</a>
+</body>
+</html> 

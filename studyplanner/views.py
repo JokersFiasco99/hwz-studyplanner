@@ -1,197 +1,248 @@
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-from .models import Calendar, Task, Habit, Goal, StudySession, Timeslot, Exam
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Calendar, Category, Task, Habit, StudySession, Goal, Subject
+from .forms import CalendarForm, TaskForm, HabitForm, GoalForm, StudySessionForm
+from django.core.mail import send_mail
+from django.utils import timezone
+from datetime import timedelta
 
-# Calendar Views
+def calendar_list(request):
+    # Get or create a single calendar for user
+    calendar, created = Calendar.objects.get_or_create(
+        user_id=1,
+        defaults={'name': 'Mein Kalender', 'beschreibung': 'Mein persönlicher Kalender'}
+    )
+    return redirect('calendar_detail', pk=calendar.id)
 
-class CalendarCreateView(CreateView):
-    model = Calendar
-    fields = ['name', 'description']
-    template_name = 'calendar_form.html'
-    success_url = reverse_lazy('calendar_list')
+def calendar_create(request):
+    if request.method == "POST":
+        form = CalendarForm(request.POST)
+        if form.is_valid():
+            calendar = form.save(commit=False)
+            calendar.user_id = 1
+            calendar.save()
+            return redirect('calendar_list')
+    else:
+        form = CalendarForm()
+    return render(request, 'calendar_form.html', {'form': form})
 
-    def form_valid(self, form):
-        form.instance.user_id = 1
-        return super().form_valid(form)
+def task_list(request):
+    sort_by = request.GET.get('sort', 'datum')
+    direction = request.GET.get('direction', 'asc')
+    
+    if sort_by == 'subject':
+        order_by = f"{'-' if direction == 'desc' else ''}subject__name"
+    else:
+        order_by = f"{'-' if direction == 'desc' else ''}{sort_by}"
+    
+    tasks = Task.objects.filter(user=request.user).order_by(order_by)
+    
+    return render(request, 'task_list.html', {
+        'tasks': tasks,
+        'current_sort': sort_by,
+        'current_direction': direction
+    })
 
-class CalendarListView(ListView):
-    model = Calendar
-    template_name = 'calendar_list.html'
+def task_create(request):
+    if request.method == "POST":
+        form = TaskForm(request.POST, user=request.user)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.user = request.user
+            calendar = Calendar.objects.filter(user=request.user).first()
+            task.kalender = calendar
+            task.save()
+            
+            if task.repeat != 'none':
+                if task.repeat == 'daily':
+                    days = 1
+                elif task.repeat == 'weekly':
+                    days = 7
+                elif task.repeat == 'biweekly':
+                    days = 14
+                
+                next_date = task.datum + timedelta(days=days)
+                Task.objects.create(
+                    title=task.title,
+                    beschreibung=task.beschreibung,
+                    datum=next_date,
+                    kalender=calendar,
+                    kategorie=task.kategorie,
+                    user=task.user,
+                    repeat=task.repeat,
+                    priority=task.priority,
+                    subject=task.subject
+                )
+            return redirect('task_list')
+    else:
+        form = TaskForm(user=request.user)
+    return render(request, 'task_form.html', {'form': form})
 
-    def get_queryset(self):
-        return Calendar.objects.filter(user_id=1)
+def habit_list(request):
+    habits = Habit.objects.filter(user_id=1)
+    return render(request, 'habit_list.html', {'habits': habits})
 
-class CalendarDetailView(DetailView):
-    model = Calendar
-    template_name = 'calendar_detail.html'
+def habit_create(request):
+    if request.method == "POST":
+        form = HabitForm(request.POST)
+        if form.is_valid():
+            habit = form.save(commit=False)
+            habit.user_id = 1
+            habit.save()
+            return redirect('habit_list')
+    else:
+        form = HabitForm()
+    return render(request, 'habit_form.html', {'form': form})
 
-class CalendarUpdateView(UpdateView):
-    model = Calendar
-    fields = ['name', 'description']
-    template_name = 'calendar_form.html'
-    success_url = reverse_lazy('calendar_list')
-class CalendarDeleteView(DeleteView):
-    model = Calendar
-    template_name = 'calendar_confirm_delete.html'
-    success_url = reverse_lazy('calendar_list')
+def goal_list(request):
+    goals = Goal.objects.filter(user_id=1)
+    return render(request, 'goal_list.html', {'goals': goals})
 
-# Task Views
+def goal_create(request):
+    if request.method == "POST":
+        form = GoalForm(request.POST)
+        if form.is_valid():
+            goal = form.save(commit=False)
+            goal.user_id = 1
+            goal.save()
+            return redirect('goal_list')
+    else:
+        form = GoalForm()
+    return render(request, 'goal_form.html', {'form': form})
 
-class TaskCreateView(CreateView):
-    model = Task
-    fields = ['title', 'description', 'deadline', 'status', 'calendar', 'category']
-    template_name = 'task_form.html'
-    success_url = reverse_lazy('task_list')
+def study_session_list(request):
+    sessions = StudySession.objects.filter(user_id=1)
+    return render(request, 'study_session_list.html', {'sessions': sessions})
 
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
+def study_session_create(request):
+    if request.method == "POST":
+        form = StudySessionForm(request.POST)
+        if form.is_valid():
+            session = form.save(commit=False)
+            session.user_id = 1
+            session.save()
+            return redirect('study_session_list')
+    else:
+        form = StudySessionForm()
+    return render(request, 'study_session_form.html', {'form': form})
 
-class TaskListView(ListView):
-    model = Task
-    template_name = 'task_list.html'
-    user_id = 1
-    context_object_name = 'task_list'
+def calendar_delete(request, pk):
+    calendar = get_object_or_404(Calendar, pk=pk)
+    calendar.delete()
+    return redirect('calendar_list')
 
-class TaskUpdateView(UpdateView):
-    model = Task
-    fields = ['title', 'description', 'deadline', 'status', 'calendar', 'category']
-    template_name = 'task_form.html'
+def task_update(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    if request.method == "POST":
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            task = form.save()
+            if task.status == 'erledigt' and task.repeat == 'weekly':
+                Task.objects.create(
+                    title=task.title,
+                    beschreibung=task.beschreibung,
+                    datum=task.datum + timedelta(days=7),
+                    kalender=task.kalender,
+                    kategorie=task.kategorie,
+                    user=task.user,
+                    repeat=task.repeat
+                )
+            return redirect('task_list')
+    else:
+        form = TaskForm(instance=task)
+    return render(request, 'task_form.html', {'form': form})
 
-class TaskDeleteView(DeleteView):
-    model = Task
-    template_name = 'task_confirm_delete.html'
-    success_url = reverse_lazy('task_list')
+def task_delete(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.delete()
+    return redirect('task_list')
 
-# Habit Views
+def habit_update(request, pk):
+    habit = get_object_or_404(Habit, pk=pk)
+    if request.method == "POST":
+        form = HabitForm(request.POST, instance=habit)
+        if form.is_valid():
+            habit = form.save()
+            return redirect('habit_list')
+    else:
+        form = HabitForm(instance=habit)
+    return render(request, 'habit_form.html', {'form': form})
 
-class HabitCreateView(CreateView):
-    model = Habit
-    fields = ['name', 'status', 'progress', 'target_value', 'category']
-    template_name = 'habit_form.html'
-    success_url = reverse_lazy('habit_list')
+def habit_delete(request, pk):
+    habit = get_object_or_404(Habit, pk=pk)
+    habit.delete()
+    return redirect('habit_list')
 
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
+def goal_update(request, pk):
+    goal = get_object_or_404(Goal, pk=pk)
+    if request.method == "POST":
+        form = GoalForm(request.POST, instance=goal)
+        if form.is_valid():
+            goal = form.save()
+            return redirect('goal_list')
+    else:
+        form = GoalForm(instance=goal)
+    return render(request, 'goal_form.html', {'form': form})
 
-class HabitListView(ListView):
-    model = Habit
-    template_name = 'habit_list.html'
-    user_id = 1
-    context_object_name = 'habit_list'
+def goal_delete(request, pk):
+    goal = get_object_or_404(Goal, pk=pk)
+    goal.delete()
+    return redirect('goal_list')
 
-class HabitUpdateView(UpdateView):
-    model = Habit
-    fields = ['name', 'status', 'progress', 'target_value', 'category']
-    template_name = 'habit_form.html'
-    success_url = reverse_lazy('habit_list')
+def calendar_update(request, pk):
+    calendar = get_object_or_404(Calendar, pk=pk)
+    if request.method == "POST":
+        form = CalendarForm(request.POST, instance=calendar)
+        if form.is_valid():
+            calendar = form.save(commit=False)
+            calendar.user_id = 1
+            calendar.save()
+            return redirect('calendar_list')
+    else:
+        form = CalendarForm(instance=calendar)
+    return render(request, 'calendar_form.html', {'form': form})
 
-class HabitDeleteView(DeleteView):
-    model = Habit
-    template_name = 'habit_confirm_delete.html'
-    success_url = reverse_lazy('habit_list')
+def subject_list(request):
+    subjects = Subject.objects.filter(user=request.user)
+    if request.method == "POST":
+        name = request.POST.get('name')
+        if name:
+            Subject.objects.create(name=name, user=request.user)
+        return redirect('subject_list')
+    return render(request, 'subject_list.html', {'subjects': subjects})
 
-# Goal Views
+def calendar_detail(request, pk):
+    calendar = get_object_or_404(Calendar, pk=pk)
+    tasks = Task.objects.filter(kalender=calendar, user=request.user)
+    study_sessions = StudySession.objects.filter(kalender=calendar, user=request.user)
+    
+    return render(request, 'calendar_detail.html', {
+        'calendar': calendar,
+        'tasks': tasks,
+        'study_sessions': study_sessions
+    })
 
-class GoalCreateView(CreateView):
-    model = Goal
-    fields = ['name', 'description', 'target_value', 'status', 'habit', 'category']
-    template_name = 'goal_form.html'
-    success_url = reverse_lazy('goal_list')
-    user_id = 1
+def index(request):
+    Category.create_defaults()
+    if request.user.is_authenticated:
+        Calendar.objects.get_or_create(
+            user=request.user,
+            defaults={
+                'name': 'Mein Kalender',
+                'beschreibung': 'Mein persönlicher Kalender'
+            }
+        )
+    return render(request, 'index.html')
 
-class GoalListView(ListView):
-    model = Goal
-    template_name = 'goal_list.html'
-    user_id = 1
-    context_object_name = 'goal_list'
-
-class GoalUpdateView(UpdateView):
-    model = Goal
-    fields = ['name', 'description', 'target_value', 'status', 'habit', 'category']
-    template_name = 'goal_form.html'
-    success_url = reverse_lazy('goal_list')
-
-class GoalDeleteView(DeleteView):
-    model = Goal
-    template_name = 'goal_confirm_delete.html'
-    success_url = reverse_lazy('goal_list')
-
-# Study Session Views
-
-class StudySessionCreateView(CreateView):
-    model = StudySession
-    fields = ['title', 'description', 'start_time', 'end_time', 'calendar', 'status', 'goal']
-    template_name = 'study_session_form.html'
-    user_id = 1
-    success_url = reverse_lazy('study_session_list')
-
-class StudySessionListView(ListView):
-    model = StudySession
-    template_name = 'study_session_list.html'
-    user_id = 1
-    context_object_name = 'study_session_list'
-
-class StudySessionUpdateView(UpdateView):
-    model = StudySession
-    fields = ['title', 'description', 'start_time', 'end_time', 'calendar', 'status', 'goal']
-    template_name = 'study_session_form.html'
-    success_url = reverse_lazy('study_session_list')
-
-class StudySessionDeleteView(DeleteView):
-    model = StudySession
-    template_name = 'study_session_confirm_delete.html'
-    success_url = reverse_lazy('study_session_list')
-
-# Timeslot Views
-
-class TimeslotCreateView(CreateView):
-    model = Timeslot
-    fields = ['title', 'start_time', 'end_time', 'study_session']
-    template_name = 'timeslot_form.html'
-    success_url = reverse_lazy('timeslot_list')
-
-class TimeslotListView(ListView):
-    model = Timeslot
-    template_name = 'timeslot_list.html'
-    user_id = 1
-    context_object_name = 'timeslot_list'
-
-class TimeslotUpdateView(UpdateView):
-    model = Timeslot
-    fields = ['title', 'start_time', 'end_time', 'study_session']
-    template_name = 'timeslot_form.html'
-    success_url = reverse_lazy('timeslot_list')
-
-class TimeslotDeleteView(DeleteView):
-    model = Timeslot
-    template_name = 'timeslot_confirm_delete.html'
-    success_url = reverse_lazy('timeslot_list')
-
-# Exam Views
-
-class ExamCreateView(CreateView):
-    model = Exam
-    fields = ['title', 'description', 'date', 'time', 'time_slot']
-    template_name = 'exam_form.html'
-    success_url = reverse_lazy('exam_list')
-
-class ExamListView(ListView):
-    model = Exam
-    template_name = 'exam_list.html'
-    user_id = 1
-    context_object_name = 'exam_list'
-
-class ExamUpdateView(UpdateView):
-    model = Exam
-    fields = ['title', 'description', 'date', 'time', 'time_slot']
-    template_name = 'exam_form.html'
-    success_url = reverse_lazy('exam_list')
-
-class ExamDeleteView(DeleteView):
-    model = Exam
-    template_name = 'exam_confirm_delete.html'
-    success_url = reverse_lazy('exam_list')
+def subject_create(request):
+    if request.method == "POST":
+        name = request.POST.get('name')
+        beschreibung = request.POST.get('beschreibung')
+        Subject.objects.create(
+            name=name,
+            beschreibung=beschreibung,
+            user=request.user
+        )
+        return redirect('task_list')
+    return render(request, 'subject_form.html')
 
 

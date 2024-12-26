@@ -1,24 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Sessions</title>
+    <title>Meine Lernsitzungen</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        td, th {
+            border: 1px solid black;
+            padding: 8px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Study Sessions</h1>
-    <ul>
-        {% for session in study_sessions %}
-            <li>
-                <strong>{{ session.title }}</strong> ({{ session.start_time }} - {{ session.end_time }})
-                <p>{{ session.description }}</p>
-                <a href="{% url 'study_session_update' session.id %}">Bearbeiten</a> |
-                <a href="{% url 'study_session_delete' session.id %}">Löschen</a>
-            </li>
-        {% empty %}
-            <li>Keine Study Sessions gefunden.</li>
+    <h1>Meine Lernsitzungen</h1>
+    
+    <table>
+        <tr>
+            <th>Titel</th>
+            <th>Beschreibung</th>
+            <th>Start</th>
+            <th>Ende</th>
+            <th>Aktionen</th>
+        </tr>
+        {% for session in sessions %}
+            <tr>
+                <td>{{ session.title }}</td>
+                <td>{{ session.beschreibung }}</td>
+                <td>{{ session.start_zeit }}</td>
+                <td>{{ session.end_zeit }}</td>
+                <td>
+                    <a href="{% url 'study_session_update' session.id %}">Bearbeiten</a>
+                    <a href="{% url 'study_session_delete' session.id %}">Löschen</a>
+                </td>
+            </tr>
         {% endfor %}
-    </ul>
-    <a href="{% url 'study_session_create' %}">Neue Study Session erstellen</a>
+    </table>
+    
+    <br>
+    <a href="{% url 'study_session_create' %}">Neue Lernsitzung</a>
 </body>
 </html>

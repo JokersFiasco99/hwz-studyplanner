@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neues Ziel erstellen</title>
+    <title>{% if form.instance.pk %}Ziel bearbeiten{% else %}Neues Ziel erstellen{% endif %}</title>
 </head>
 <body>
-    <h1>Neues Ziel erstellen</h1>
+    <h1>{% if form.instance.pk %}Ziel bearbeiten{% else %}Neues Ziel erstellen{% endif %}</h1>
+    
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Ziel erstellen</button>
+        <button type="submit">{% if form.instance.pk %}Speichern{% else %}Erstellen{% endif %}</button>
     </form>
-    <a href="{% url 'goal_list' %}">Zurück zur Zielübersicht</a>
+    
+    <a href="{% url 'goal_list' %}">Zurück zur Übersicht</a>
 </body>
 </html>

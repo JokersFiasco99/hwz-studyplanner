@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meine Fächer</title>
+</head>
+<body>
+    <h1>Meine Fächer</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Neues Fach" required>
+        <button type="submit">Erstellen</button>
+    </form>
+
+    <ul>
+    {% for subject in subjects %}
+        <li>{{ subject.name }}</li>
+    {% endfor %}
+    </ul>
+    
+    <a href="{% url 'task_list' %}">Zurück zur Aufgabenliste</a>
+</body>
+</html> 

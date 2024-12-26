@@ -1,21 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Aufgabenliste</title>
+    <title>Meine Aufgaben</title>
 </head>
 <body>
-    <h1>Deine Aufgaben</h1>
-    <ul>
-        {% for task in task_list %}
-            <li>
-                <strong>{{ task.title }}</strong>: {{ task.description }} (Deadline: {{ task.deadline }}, Status: {{ task.status }})
-                <a href="{% url 'task_update' task.id %}">Bearbeiten</a> |
-                <a href="{% url 'task_delete' task.id %}">Löschen</a>
-            </li>
-        {% empty %}
-            <li>Keine Aufgaben gefunden.</li>
+    <h1>Meine Aufgaben</h1>
+    <table>
+        <tr>
+            <th>Titel</th>
+            <th>Beschreibung</th>
+            <th>
+                <a href="?sort=datum&direction={% if current_sort == 'datum' and current_direction == 'asc' %}desc{% else %}asc{% endif %}">
+                    Datum {% if current_sort == 'datum' %}{% if current_direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+                </a>
+            </th>
+            <th>Status</th>
+            <th>
+                <a href="?sort=priority&direction={% if current_sort == 'priority' and current_direction == 'asc' %}desc{% else %}asc{% endif %}">
+                    Priorität {% if current_sort == 'priority' %}{% if current_direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+                </a>
+            </th>
+            <th>
+                <a href="?sort=subject&direction={% if current_sort == 'subject' and current_direction == 'asc' %}desc{% else %}asc{% endif %}">
+                    Fach {% if current_sort == 'subject' %}{% if current_direction == 'asc' %}↑{% else %}↓{% endif %}{% endif %}
+                </a>
+            </th>
+            <th>Wiederholung</th>
+            <th>Aktionen</th>
+        </tr>
+        {% for task in tasks %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.beschreibung }}</td>
+                <td>{{ task.datum }}</td>
+                <td>{{ task.status }}</td>
+                <td>{{ task.get_priority_display }}</td>
+                <td>{{ task.subject }}</td>
+                <td>{{ task.get_repeat_display }}</td>
+                <td>
+                    <a href="{% url 'task_update' task.id %}">Bearbeiten</a>
+                    <a href="{% url 'task_delete' task.id %}">Löschen</a>
+                </td>
+            </tr>
         {% endfor %}
-    </ul>
-    <a href="{% url 'task_create' %}">Neue Aufgabe erstellen</a>
+    </table>
+    <a href="{% url 'task_create' %}">Neue Aufgabe</a>
 </body>
 </html>

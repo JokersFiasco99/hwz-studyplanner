@@ -1,11 +1,67 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ object.name }}</title>
+    <title>{{ calendar.name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .priority-hoch { color: #dc3545; }
+        .priority-mittel { color: #ffc107; }
+        .priority-niedrig { color: #198754; }
+    </style>
 </head>
 <body>
-    <h1>{{ object.name }}</h1>
-    <p>{{ object.description }}</p>
-    <a href="{% url 'calendar_list' %}">Zurück zur Kalenderliste</a>
+    <div class="container mt-4">
+        <div class="mb-4">
+            <h1>{{ calendar.name }}</h1>
+        </div>
+
+        <div class="row">
+            <!-- Tasks Card -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Aufgaben</h5>
+                        <a href="{% url 'task_create' %}" class="btn btn-sm btn-primary">+ Neue Aufgabe</a>
+                    </div>
+                    <div class="card-body">
+                        {% for task in tasks %}
+                            <div class="mb-3 p-2 border-bottom priority-{{ task.priority }}">
+                                <strong>{{ task.title }}</strong>
+                                <div class="small text-muted">
+                                    Fällig: {{ task.datum|date:"d.m.Y" }}
+                                    | Status: {{ task.status }}
+                                    | Priorität: {{ task.get_priority_display }}
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p class="text-muted">Keine Aufgaben vorhanden</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Study Sessions Card -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Lernsitzungen</h5>
+                        <a href="{% url 'study_session_create' %}" class="btn btn-sm btn-primary">+ Neue Sitzung</a>
+                    </div>
+                    <div class="card-body">
+                        {% for session in study_sessions %}
+                            <div class="mb-3 p-2 border-bottom">
+                                <strong>{{ session.title }}</strong>
+                                <div class="small text-muted">
+                                    {{ session.start_time|date:"d.m.Y H:i" }} - {{ session.end_time|date:"d.m.Y H:i" }}
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p class="text-muted">Keine Lernsitzungen vorhanden</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

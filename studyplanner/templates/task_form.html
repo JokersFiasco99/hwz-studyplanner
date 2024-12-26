@@ -1,15 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
-    <title>Neue Aufgabe erstellen</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if form.instance.pk %}Aufgabe bearbeiten{% else %}Neue Aufgabe erstellen{% endif %}</title>
 </head>
 <body>
-    <h1>Neue Aufgabe erstellen</h1>
+    <h1>{% if form.instance.pk %}Aufgabe bearbeiten{% else %}Neue Aufgabe erstellen{% endif %}</h1>
+    
+    <a href="{% url 'subject_create' %}" class="btn btn-sm btn-primary">+ Neues Fach</a>
+    
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Erstellen</button>
+        <button type="submit">{% if form.instance.pk %}Speichern{% else %}Erstellen{% endif %}</button>
     </form>
-    <a href="{% url 'calendar_list' %}">Zurück zur Kalenderliste</a>
+    
+    <a href="{% url 'task_list' %}">Zurück zur Übersicht</a>
 </body>
 </html>

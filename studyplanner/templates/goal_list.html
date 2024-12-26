@@ -1,24 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ziele Übersicht</title>
+    <title>Meine Ziele</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        td, th {
+            border: 1px solid black;
+            padding: 8px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Deine Ziele</h1>
-    <ul>
-        {% for goal in goal_list %}
-            <li>
-                <strong>{{ goal.name }}</strong>: {{ goal.description }}
-                (Status: {{ goal.status }}, Fortschritt: {{ goal.current_value }}/{{ goal.target_value }})
-                | <a href="{% url 'goal_update' goal.id %}">Bearbeiten</a>
-                | <a href="{% url 'goal_delete' goal.id %}">Löschen</a>
-            </li>
-        {% empty %}
-            <li>Keine Ziele gefunden.</li>
+    <h1>Meine Ziele</h1>
+    
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Beschreibung</th>
+            <th>Fortschritt</th>
+            <th>Aktionen</th>
+        </tr>
+        {% for goal in goals %}
+            <tr>
+                <td>{{ goal.name }}</td>
+                <td>{{ goal.beschreibung }}</td>
+                <td>{{ goal.fortschritt }}/{{ goal.zielwert }}</td>
+                <td>
+                    <a href="{% url 'goal_update' goal.id %}">Bearbeiten</a>
+                    <a href="{% url 'goal_delete' goal.id %}">Löschen</a>
+                </td>
+            </tr>
         {% endfor %}
-    </ul>
-    <a href="{% url 'goal_create' %}">Neues Ziel erstellen</a>
+    </table>
+    
+    <br>
+    <a href="{% url 'goal_create' %}">Neues Ziel</a>
 </body>
 </html>

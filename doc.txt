@@ -1,0 +1,383 @@
+1
+StudyPlanner
+Projektarbeit
+Zürcher Fachhochschule
+HWZ Hochschule für Wirtschaft Zürich
+Eingereicht im Kurs:
+Software Engineering Processes
+Bei dem Dozierenden:
+Giuseppe Accaputo (MSc ETH)
+Vorgelegt von: Owen Blesi, Michael Hurschler, Daniel Ivkanovic, Gil Sozinho
+Matrikelnummer:
+Studiengang: BWI-A22
+Ort, Datum: Zürich, 30. Januar 2025
+2
+Ehrenwörtliche Erklärung
+Wir bestätigen hiermit, dass wir
+• die vorliegende Projektarbeit selbständig und ohne Benützung anderer als der
+angegebenen Quellen und Hilfsmittel anfertigten,
+• die benutzten Quellen wörtlich oder inhaltlich als solche kenntlich machten,
+• diese Projektarbeit in gleicher oder ähnlicher Form noch an keiner Hochschule
+zur Bewertung einreichten.
+• zugesichert haben, dass wir die Nutzung von Chatbots, einschließlich ChatGPT,
+Claude, etc., auf ein Minimum beschränken werden und uns in erster Linie auf
+traditionelle wissenschaftliche Quellen und bewährte Forschungsmethoden
+stützen werden, um die Qualität und Unabhängigkeit unserer Arbeit zu
+gewährleisten;
+• bei der Verwendung von Chatbots, einschließlich ChatGPT, Claude, etc., zur
+Beantwortung von Fragen, die sich auf die Themen in der Dokumentation und im
+Code beziehen, a) den Inhalt der Interaktionen verstanden und in unseren
+eigenen Worten wiedergegeben haben, ohne direkte Kopien des Outputs des
+Chatbots zu verwenden, und b) den Verlauf des dazugehörigen Chatbot-
+Austauschs in den Quellenangaben dokumentiert und für den Dozenten zur
+Einsicht bereitgestellt haben (z.B. für ChatGPT siehe
+https://help.openai.com/en/articles/7925741-chatgpt-shared-links-faq)
+Ort, Datum
+………………………………………………………………………
+(Unterschriften)
+3
+Inhaltsverzeichnis
+Ehrenwörtliche Erklärung ......................................................................................................... 2
+1. Rollenverteilung ................................................................................................................ 4
+2. Termine: ............................................................................................................................ 4
+3. Organisation: .................................................................................................................... 4
+4. Produktvision .................................................................................................................... 5
+5. Personas ........................................................................................................................... 5
+Persona 1: Anna, die berufsbegleitende BWL-Studentin ................................................. 5
+Persona 2: Maximilian, der Informatik-Student ................................................................. 6
+Persona 3: Thomas, der 50-jährige Familienvater und Student ....................................... 8
+6. Szenarios .......................................................................................................................... 9
+Szenario 1: Lernphasen und –zeit bestimmen ................................................................. 9
+Szenario 2: Prüfung vorbereiten ....................................................................................... 9
+Szenario 3: Zeitplanung und Pausen überprüfen ............................................................. 9
+Szenario 4: Importfunktion nutzen .................................................................................... 9
+Szenario 5: ToDos erstellen ............................................................................................. 9
+Szenario 6: Termine organisieren ..................................................................................... 9
+7. User Stories .................................................................................................................... 10
+User Story 1: Kalenderverwaltung (US1) ........................................................................ 10
+User Story 2: Aufgabenverwaltung (US2) ....................................................................... 10
+User Story 3: Habit Tracking (US3) ................................................................................ 10
+User Story 4: To-Do-Verwaltung (US4) .......................................................................... 11
+8. Features .......................................................................................................................... 11
+Feature 1: Kalenderverwaltung (FT1) ............................................................................. 11
+Feature 2: Aufgabenverwaltung (FT2) ............................................................................ 11
+Feature 3: Habit Tracking (FT3) ..................................................................................... 12
+Feature 4: ToDo (FT4) .................................................................................................... 12
+9. Nicht Funktionale Anforderungen ................................................................................... 12
+Block 3: .................................................................................................................................. 15
+Block 4: .................................................................................................................................. 15
+4
+1. Rollenverteilung
+Name: Rolle: Stellvertretungen:
+Blesi Owen Product Owner Tech. Lead
+Hurschler Michael Qualitiy Assurance Lead Product Owner
+Ivkovic Daniel Project Manager Quality Assurance Lead
+Sozinho Gil Tech. Lead & Entwickler Project Manager
+2. Termine:
+Abgabe: Webapplikation und Dokumentation bis spätestens
+Sonntag, 26.01.2025, 23:59 Uhr
+Präsentation: am Dienstagnachmittag, 04.02.2025, vor Ort
+3. Organisation:
+Meetings: Wir treffen uns regelmässig am Sonntagmorgen um 10 Uhr
+Aufgaben: Die Aufgaben werden gerecht und nach Fähigkeiten verteilt und im
+MS Teams Planner (ähnlich Jira) festgehalten, zugeteilt und
+terminiert.
+Verantwortung: Jedes Teammitglied ist verantwortlich für das erfolgreiche
+Gelingen des Produktes StudyPlanner und ist sich seiner Rolle
+und Stellvertretung bewusst, damit immer jemand den Lead in
+seiner Funktion übernimmt.
+Vereinbarung: Wir streben an, ein sehr gutes Produkt zu entwickeln und reservieren
+uns dafür genügend Zeit und Ressourcen.
+5
+4. Produktvision
+Wir wollen die führende Plattform für die Organisation des Studienalltags werden. Mit
+StudyPlanner schaffen wir einen Ort, an dem Studierende ihre Zeit optimal planen, effizient
+lernen und produktiv arbeiten können – für ein erfolgreiches und erfülltes Studium
+Zielgruppe: Studierende
+Bedarf: Eine intuitive, effiziente und benutzerfreundliche Lösung zur
+Verwaltung von Vorlesungen, Aufgaben, To-Do's und
+Gewohnheiten, die die Organisation des Studienalltags erleichtert.
+Produktkategorie: StudyPlanner / Digitale Organisationsplattform
+Hauptnutzen: Zentrale und einfache Verwaltung von Terminen, Aufgaben und
+täglichen Gewohnheiten (z.B. Freizeitaktivitäten), um den
+Studienalltag effizient zu organisieren und das Zeitmanagement zu
+verbessern.
+Konkurrenz: Studysmarter.de, Study Quest, Notion, Obsidian
+USP: Zentrale Lösung für alle Aspekte des Studienalltags, die
+individuell anpassbar ist und speziell auf die Erleichterung des
+effektiven Lernprozesses ausgerichtet ist. StudyPlanner bietet eine
+benutzerfreundliche, massgeschneiderte Lösung, die den
+Lernprozess optimiert und im Gegensatz zu konkurrierenden
+Plattformen ohne externe Tools vollständig abdeckt.
+5. Personas
+Persona 1: Anna, die berufsbegleitende BWL-Studentin
+Steckbrief:
+• Alter: 25 Jahre
+• Studiengang / Jobbezeichnung: BWL, Teilzeitangestellte einer Privatbank
+• Technische Affinität: Outlook Grundkenntnisse, unorganisierte Toolnutzung
+• Hauptziel: Effiziente Organisation von Vorlesungen, Aufgaben und
+Lerngewohnheiten im Einklang mit ihrem Berufsalltag, um Studium und
+Freizeit gesund und erfolgreich zu managen.
+• Erfahrung: Anna nutzt seit der Mittelstufe digitale Kalender und hat diverse
+Apps zur Organisation ihres Schulalltags ausprobiert. Sie ist technikaffin und
+vertraut im Umgang mit mobilen Endgeräten.
+• Bildung: Anna studiert im ersten Semester Informatik und legt Wert auf
+effizientes Zeitmanagement, um Studium und Freizeit optimal zu vereinbaren.
+6
+• Interesse am StudyPlanner: Durch ihre Erfahrung mit verschiedenen Apps
+weiss Anna, welche Funktionen ihr wichtig sind. Sie sucht eine App, die
+Stundenplan, Aufgaben und Prüfungen übersichtlich darstellt und ihr hilft,
+den Überblick zu behalten.
+Zusammenfassung:
+Anna arbeitet seit ihrer kaufmännischen Ausbildung Teilzeit bei einer Privatbank und
+ist beruflich sehr eingespannt. Sie ist eine chaotische Person und hat
+Schwierigkeiten, ihren Alltag effizient zu organisieren, da sie kein
+Organisationstalent ist. Derzeit nutzt sie Outlook, hat aber nur über ihren
+Firmenlaptop Zugriff darauf, was ihre Flexibilität einschränkt.
+Anna hat seit der Mittelschule digitale Kalender und Organisationstools benutzt und
+viele Apps ausprobiert. Dabei hat sie festgestellt, dass diese oft nicht alle
+Funktionen bieten, die sie benötigt. Deshalb sucht sie nach einer zentralen und
+benutzerfreundlichen Lösung, die ihre Stundenpläne, Aufgaben und Prüfungen
+übersichtlich darstellt und ihr Lernverhalten nachverfolgt.
+Mit dem StudyPlanner möchte Anna ihre Zeit effizienter nutzen, ihre Aufgaben
+stressfreier organisieren und ihre persönlichen und akademischen Ziele erfolgreich
+erreichen.
+Persona 2: Maximilian, der Informatik-Student
+Steckbrief:
+• Alter: 23 Jahre
+• Studiengang: Informatik, 6. Semester
+• Technische Affinität: Sehr technikaffin, nutzt bereits mehrere Tools zur
+Organisation
+• Hauptziel: Integrierte Plattform, die mehrere Tools ersetzt, um Zeit zu sparen
+und effizienter zu arbeiten.
+• Erfahrung: Max hat bisher hauptsächlich analoge Kalender und To-Do-
+Listen verwendet. Er ist zwar kein Digital Native, aber offen für neue
+Technologien, die ihm das Studium erleichtern.
+• Bildung: Max studiert im dritten Semester Maschinenbau und hat
+Schwierigkeiten, den Überblick über die vielen Vorlesungen, Übungen und
+Abgaben zu behalten.
+• Interesse am StudyPlanner: Max erhofft sich vom StudyPlanner eine
+bessere Organisation seines Studienalltags und möchte seine Zeit effizienter
+nutzen.
+7
+Zusammenfassung:
+Maximilian ist 23 Jahre alt und studiert im sechsten Semester InformaZk. Obwohl er technikaffin ist,
+hat er bisher hauptsächlich analoge Kalender und To-do-Listen genutzt. Durch die vielen parallelen
+Anforderungen seines Studiums - Vorlesungen, Übungen und Abgaben - verliert er o^ den Überblick.
+Max ist offen für neue Technologien und sucht nach einer integrierten Pla`orm, die ihm hil^, alle
+Aufgaben und Termine zentral zu organisieren. Er möchte die Vielzahl der verwendeten Tools durch
+eine einzige, effiziente Lösung ersetzen.
+Mit dem StudyPlanner erhoa sich Max, seinen Studienalltag besser zu strukturieren, Zeit zu sparen
+und sich auf das Wesentliche konzentrieren zu können.
+8
+Persona 3: Thomas, der 50-jährige Familienvater und Student
+Steckbrief:
+• Alter: 50 Jahre
+• Studiengang: Soziale Arbeit, berufsbegleitend
+• Technische Affinität: Geringe technische Fähigkeiten, Schwierigkeiten mit
+komplexen digitalen Tools
+• Hauptziel: Einfache Verwaltung von Studium, Beruf und Familienleben mit
+minimalem technischem Aufwand
+• Erfahrung: Thomas hat bisher wenig Erfahrung mit digitalen
+Organisationstools. Er nutzt seinen Computer hauptsächlich für die Arbeit
+und gelegentlich für E-Mails und soziale Medien.
+• Bildung: Thomas hat eine Ausbildung zum Schreiner abgeschlossen und
+arbeitet seit vielen Jahren in diesem Beruf. Nebenbei holt er berufsbegleitend
+die Matura nach, um danach Soziale Arbeit zu studieren.
+• Interesse am StudyPlanner: Thomas sucht nach einer einfachen und
+übersichtlichen Möglichkeit, seine Lernzeiten zu planen und den Überblick
+über seine Aufgaben zu behalten. Der StudyPlanner soll ihm helfen, Studium,
+Beruf und Familie besser zu vereinbaren.
+Zusammenfassung:
+Thomas ist 50 Jahre alt und studiert berufsbegleitend Sozialarbeit. Neben dem
+Studium arbeitet er als Schreiner und holt gleichzeitig die Matura nach. Als
+Familienvater mit zwei Kindern steht er vor der Herausforderung, die vielen
+Verpflichtungen von Studium, Beruf und Familie unter einen Hut zu bringen.
+Seine bisherigen Erfahrungen mit digitalen Organisationstools sind begrenzt, da er
+seinen Computer hauptsächlich für berufliche Zwecke und gelegentlich für E-Mails
+und Social Media nutzt. Digitale Tools empfindet er oft als zu komplex und
+unübersichtlich.
+Mit dem StudyPlanner erhofft sich Thomas eine intuitive und benutzerfreundliche
+Lösung, die ihm hilft, seine Lernzeiten besser zu planen und den Überblick über
+Aufgaben und Termine zu behalten. So möchte er Studium, Beruf und Familie
+effizienter und stressfreier organisieren.
+9
+6. Szenarios
+Szenario 1: Lernphasen und –zeit bestimmen
+Anna möchte ihr Lernpensum für die kommende Prüfungsphase planen. Sie nutzt den
+StudyPlanner, um ihre wöchentlichen Lernziele festzulegen (z.B. 15 Stunden). Sie
+kategorisiert die Lerneinheiten nach Fächern und markiert abgeschlossene Einheiten als
+"erledigt". Anna nutzt die Fortschrittsanzeige des StudyPlanners (Feature 3), um ihren
+Lernfortschritt zu verfolgen und zu sehen, ob sie ihr wöchentliches Ziel erreicht.
+Szenario 2: Prüfung vorbereiten
+Anna nutzt den StudyPlanner, um sich auf eine Prüfung vorzubereiten. Sie erstellt im
+Aufgabenmanager (Feature 2) Aufgaben für jedes Thema, das sie lernen muss (z.B. "Kapitel
+3 lesen", "Übungsaufgaben lösen"). Sie ordnet die Aufgaben den entsprechenden Terminen
+im Kalender (Feature 1) zu und setzt Prioritäten. Anna nutzt die Erinnerungsfunktion
+(Feature 1), um rechtzeitig an die Prüfungstermine erinnert zu werden.
+Szenario 3: Zeitplanung und Pausen überprüfen
+Maximilian nimmt an einem Hackathon teil und möchte seine Zeit optimal planen. Er nutzt
+den StudyPlanner, um die Aufgaben des Hackathons und seine Studienprojekte zu
+organisieren. Er trägt die Termine des Hackathons in den Kalender (Feature 1) ein und
+erstellt Aufgaben für die einzelnen Projektphasen (Feature 2). Maximilian aktiviert die
+Pausen-Erinnerungsfunktion (Feature 1), um regelmäßige Pausen einzulegen und
+konzentriert zu bleiben.
+Szenario 4: Importfunktion nutzen
+Maximilian startet ins neue Semester und nutzt die Importfunktion des StudyPlanners
+(Feature 1), um seinen Stundenplan aus dem Online-Portal der Universität zu importieren.
+Er sieht nun alle Vorlesungen, Seminare und Übungen übersichtlich im Kalender dargestellt.
+Maximilian ergänzt den Kalender um wichtige Deadlines und Termine für seine
+Studienprojekte.
+Szenario 5: ToDos erstellen
+Thomas möchte seine Aufgaben besser organisieren und nutzt die ToDo-Liste (Feature 4)
+des StudyPlanners. Er erstellt Aufgaben für verschiedene Kategorien (Studium, Arbeit,
+Familie) und setzt Prioritäten. Thomas nutzt die Erinnerungsfunktion (Feature 4), um
+rechtzeitig an wichtige Aufgaben erinnert zu werden.
+Szenario 6: Termine organisieren
+Thomas nutzt den Kalender (Feature 1) des StudyPlanners, um alle seine Termine
+(Studium, Arbeit, Familie, Freizeit) zu organisieren. Er trägt die Vorlesungstermine aus
+seinem Stundenplan ein und ergänzt den Kalender um seine Arbeitszeiten und
+Familienaktivitäten. Thomas nutzt die Erinnerungsfunktion (Feature 1), um keine Termine zu
+verpassen.
+10
+7. User Stories
+User Story 1: Kalenderverwaltung (US1)
+Als Thomas möchte ich meine Vorlesungen, Arbeitstermine und Familienaktivitäten in einem
+benutzerfreundlichen Kalender organisieren, damit ich meinen Verpflichtungen im Studium,
+Beruf und Familienleben nachkomme und leicht den Überblick behalte.
+Akzeptanzkriterien:
+• Neue Termine (Vorlesungen, Arbeitstreffen, Familienaktivitäten) können
+hinzugefügt werden.
+• Vorlesungen können aus einer .ics-Datei importiert werden.
+• Termine können in Kategorien unterteilt werden (Studium, Arbeit, Sport, Familie,
+Freizeit).
+• Der Nutzer kann Erinnerungen für Termine einstellen.
+• Wiederkehrende Termine (wöchentliche Vorlesungen, regelmässige
+Arbeitstreffen) können eingestellt werden.
+• Der Kalender ist übersichtlich und intuitiv, auch ohne technisches Fachwissen
+einfach bedienbar.
+User Story 2: Aufgabenverwaltung (US2)
+Als Maximilian möchte ich meine Aufgaben priorisieren und nach Deadlines sortieren, um
+meine Zeit effizient zu planen und sicherzustellen, dass ich keine wichtigen Abgaben
+verpasse.
+Akzeptanzkriterien:
+• Neue Aufgaben können hinzugefügt und ihnen ein Fälligkeitsdatum zugewiesen
+werden.
+• Aufgaben können nach Fälligkeitsdatum sortiert werden.
+• Aufgaben können mit einer Prioritätsstufe versehen (hoch, mittel, niedrig)
+werden.
+• Aufgaben können als "erledigt", "in Arbeit", "pendent" markiert werden.
+• Fächer können definiert werden.
+• Aufgaben können nach Fächern sortiert werden.
+• Der Nutzer kann Erinnerungen für Aufgaben einstellen.
+User Story 3: Habit Tracking (US3)
+Als Anna möchte ich meine Lerngewohnheiten täglich verfolgen, um sicherzustellen, dass
+ich regelmässig Zeit zum Lernen einplane und meine Lernziele erreiche.
+Akzeptanzkriterien:
+• Ich kann tägliche Lerngewohnheiten erstellen und festlegen.
+• Lernfortschritte können markiert werden (erledigt, in Arbeit, pendent).
+• Fortschritt können in Form eines wöchentlichen oder monatlichen Reports
+angezeigt werden.
+11
+• Ich kann vergangene Wochen und Monate durchsehen, um den Verlauf meiner
+Lerngewohnheiten zu analysieren.
+User Story 4: To-Do-Verwaltung (US4)
+Als Thomas möchte ich eine To-Do-Liste erstellen können, damit ich alle Aufgaben und ihre
+Fristen sehen kann.
+Akzeptanzkriterien:
+• Aufgabe sollen mit einer Kategorie (Studium, Arbeit, Sport, Familie, Freizeit) und
+Dringlichkeit versehen werden können.
+• Aufgaben können terminiert, aufgeschoben oder erledigt werden.
+• Erinnerungen sollen automatisch per Mail verschickt werden.
+8. Features
+Feature 1: Kalenderverwaltung (FT1)
+User Stories (IDs): #US1, #US2, #US6
+Einschränkungen:
+• Kalender darf aufgrund des Datenschutzes nicht öffentlich (ohne Login)
+zugänglich sein.
+• Datum, Zeit und Titel sind Pflichtfelder, alles andere sind optionale Felder.
+Kommentare:
+• Der Kalender muss übersichtlich sein.
+• Die Termine sollen im Kalender oder als Liste angezeigt werden.
+• Der Kalender soll eine Erinnerungsfunktion für Termine haben.
+Feature 2: Aufgabenverwaltung (FT2)
+User Stories (IDs): #US2
+Einschränkungen:
+• Datum, Zeit und Titel, Status, sind Pflichtfelder, alles andere sind optionale
+Felder.
+Kommentare:
+12
+• Aufgabenverwaltung muss einfach und intuitiv möglich sein.
+• Die Aufgabenverwaltung soll eine Erinnerungsfunktion für Aufgaben haben.
+Feature 3: Habit Tracking (FT3)
+User Stories (IDs): #US3
+Einschränkungen:
+• Mutationen einschränken, die das Reporting negativ beeinflussen könnten.
+Kommentare:
+• Statistiken und Fortschrittsanzeigen sollten intuitiv und minimalistisch gestaltet
+sein
+Feature 4: ToDo (FT4)
+User Stories (IDs): #US4, #US5
+Einschränkungen:
+• Vorgegebene Kategorien, um eine nahtlose Reportingfunktion einfach
+sicherzustellen.
+Kommentare:
+• Die Möglichkeit, wiederkehrende Aufgaben zu erstellen, sollte vorhanden sein.
+• Die ToDo-Liste sollte visuell klar und übersichtlich sein, mit einer Funktion zur
+Kategorisierung von Aufgaben (z. B. Arbeit, Privat, etc.).
+• Integration mit Kalender- und Erinnerungsfunktionen ist wünschenswert, um
+Aufgaben fristgerecht zu erledigen.
+9. Nicht Funktionale Anforderungen
+Nicht-funktionale Anforderungen
+Um die Qualität und den Erfolg des StudyPlanners sicherzustellen, müssen
+neben den funktionalen Anforderungen auch nicht-funktionale Anforderungen
+erfüllt werden. Diese Anforderungen beziehen sich auf Eigenschaften des
+Systems, die nicht direkt mit den Funktionen zusammenhängen, aber dennoch
+wichtig für die Nutzerzufriedenheit und die Akzeptanz des Systems sind.
+13
+Die nicht-funktionalen Anforderungen für den StudyPlanner lassen sich in
+folgende Kategorien einteilen:
+Performance:
+• Die Anwendung soll schnell laden und reagieren, auch bei der Anzeige von
+komplexen Stundenplänen mit vielen Veranstaltungen und Aufgaben. Die
+Ladezeiten sollen unter 2 Sekunden liegen.
+• Die Anwendung soll eine hohe Anzahl gleichzeitiger Nutzer unterstützen, ohne
+dass es zu Performance-Einbussen kommt.
+Sicherheit:
+• Nutzerdaten, insbesondere Passwörter und persönliche Informationen, sollen
+verschlüsselt gespeichert und vor unbefugtem Zugriff geschützt werden.
+• Die Anwendung soll die gängigen Sicherheitsstandards erfüllen, um die
+Datenintegrität und -sicherheit zu gewährleisten.
+• Es soll eine Zwei-Faktor-Authentifizierung angeboten werden, um die Sicherheit
+der Nutzerkonten zu erhöhen.
+Benutzbarkeit (Usability):
+• Die Benutzeroberfläche soll intuitiv und einfach zu bedienen sein, so dass
+Studenten den Stundenplan und Aufgaben ohne Schwierigkeiten verwalten
+können.
+• Die Anwendung soll auf verschiedenen Geräten (Desktop, Tablet, Smartphone)
+und in verschiedenen Browsern benutzerfreundlich dargestellt werden.
+• Die Anwendung soll barrierefrei zugänglich sein, um auch Studenten mit
+Behinderungen die Nutzung zu ermöglichen.
+Zuverlässigkeit:
+• Die Anwendung soll stabil laufen und zuverlässig funktionieren, um
+sicherzustellen, dass Studenten jederzeit auf ihre Daten zugreifen können.
+• Die Anwendung soll eine Verfügbarkeit von 99,9% haben, um Ausfallzeiten zu
+minimieren.
+• Fehler und Ausnahmen sollen sinnvoll behandelt werden, um Datenverluste zu
+vermeiden und dem Nutzer hilfreiche Informationen anzuzeigen.
+Skalierbarkeit:
+• Die Anwendung soll in der Lage sein, eine wachsende Anzahl von Nutzern und
+Daten zu bewältigen.
+14
+• Die Architektur der Anwendung soll so gestaltet sein, dass sie bei Bedarf
+erweitert und an zukünftige Anforderungen angepasst werden kann.
+Wartbarkeit:
+• Der Code soll modular und gut dokumentiert sein, um die Wartung und
+Weiterentwicklung der Anwendung zu erleichtern.
+• Die Anwendung soll so konzipiert sein, dass neue Funktionen und Module
+einfach hinzugefügt werden können.
+15
+Block 3:
+Block 4:
+• Architektur?
+• Django

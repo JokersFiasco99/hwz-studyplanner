@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>StudyPlanner</title>
+</head>
+<body>
+    <h1>StudyPlanner</h1>
+    <div>
+        <a href="{% url 'calendar_detail' 1 %}">Kalender</a>
+        <a href="{% url 'task_list' %}">Aufgaben</a>
+        <a href="{% url 'habit_list' %}">Gewohnheiten</a>
+        <a href="{% url 'study_session_list' %}">Lernsitzungen</a>
+    </div>
+</body>
+</html> 

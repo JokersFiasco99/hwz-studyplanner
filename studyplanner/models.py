@@ -1,108 +1,104 @@
-from django.contrib.auth.models import User
 from django.db import models
-from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Calendar(models.Model):
     name = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True)
+    beschreibung = models.TextField(blank=True, null=True)
+    datum = models.DateField(default=timezone.now)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.name
+
 class Category(models.Model):
-    CATEGORY_CHOICES = [
-        ('STUDIUM', 'Studium'),
-        ('ARBEIT', 'Arbeit'),
-        ('SPORT', 'Sport'),
-        ('FAMILIE', 'Familie'),
-        ('FREIZEIT', 'Freizeit'),
-    ]
+    name = models.CharField(max_length=100)
+    beschreibung = models.TextField(blank=True, null=True)
+    is_default = models.BooleanField(default=False)
 
-    CATEGORY_DESCRIPTIONS = {
-        'STUDIUM': 'Kategorien für Vorlesungen, Prüfungen oder Studienprojekte.',
-        'ARBEIT': 'Kategorien für berufliche Termine, Meetings oder Aufgaben.',
-        'SPORT': 'Kategorien für Fitness- oder Trainingsaktivitäten.',
-        'FAMILIE': 'Kategorien für private Termine oder Familienzeit.',
-        'FREIZEIT': 'Kategorien für Hobbys, Ausflüge oder entspannte Aktivitäten.',
-    }
-    
-    name = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
+    @classmethod
+    def create_defaults(cls):
+        defaults = ['Studium', 'Arbeit', 'Sport', 'Familie', 'Freizeit']
+        for name in defaults:
+            cls.objects.get_or_create(name=name, is_default=True)
 
-    def get_description(self):
-        return self.CATEGORY_DESCRIPTIONS.get(self.name, 'Keine Beschreibung verfügbar')
-
+    def __str__(self):
+        return self.name
 
 class Task(models.Model):
+    REPEAT_CHOICES = [
+        ('none', 'Keine Wiederholung'),
+        ('daily', 'Täglich'),
+        ('weekly', 'Wöchentlich'),
+        ('biweekly', 'Alle zwei Wochen'),
+    ]
+    
+    PRIORITY_CHOICES = [
+        ('niedrig', 'Niedrig'),
+        ('mittel', 'Mittel'),
+        ('hoch', 'Hoch'),
+    ]
+    
     title = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True)
-    deadline = models.DateField(blank=True, null=True)
-    status = models.CharField(max_length=100, choices=[('offen', 'Offen'), ('in_arbeit', 'In Arbeit'), ('erledigt', 'Erledigt')], default='offen')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
+    beschreibung = models.TextField(blank=True, null=True)
+    datum = models.DateField()
+    status = models.CharField(max_length=20, default='offen')
+    kalender = models.ForeignKey(Calendar, on_delete=models.CASCADE)
+    kategorie = models.ForeignKey(Category, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    repeat = models.CharField(max_length=10, choices=REPEAT_CHOICES, default='none')
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='niedrig')
+    subject = models.ForeignKey('Subject', on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return self.title
 
 class Habit(models.Model):
     name = models.CharField(max_length=100)
-    status = models.BooleanField(default=False)
-    progress = models.IntegerField(default=0)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    target_value = models.IntegerField(default=0)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
+    beschreibung = models.TextField(blank=True, null=True)
+    zielwert = models.IntegerField(default=0)
+    fortschritt = models.IntegerField(default=0)
+    kategorie = models.ForeignKey(Category, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-class Goal(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True)
-    target_value = models.IntegerField(default=0)
-    current_value = models.IntegerField(default=0)
-    status = models.BooleanField(default=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    habit = models.OneToOneField(Habit, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
-
-    def clean(self):
-        if self.current_value > self.target_value:
-            raise ValidationError("Aktueller Wert muss kleiner als der Zielwert sein")
-
-class Notification(models.Model):
-    title = models.CharField(max_length=100)
-    message = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    status = models.CharField(max_length=100, choices=[('geplant', 'Geplant'), ('versendet', 'Versendet')], default='geplant')
-    sent_at = models.DateTimeField(blank=True, null=True)
+    def __str__(self):
+        return self.name
 
 class StudySession(models.Model):
     title = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
-    status = models.CharField(max_length=100, choices=[('geplant', 'Geplant'), ('abgeschlossen', 'Abgeschlossen')], default='geplant')
-    goal = models.ManyToManyField(Goal, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    
-    def get_duration(self):
-        return self.end_time - self.start_time
-    
-    def clean(self):
-        if self.start_time >= self.end_time:
-            raise ValidationError("Startzeit muss vor Endzeit liegen")
+    beschreibung = models.TextField(blank=True, null=True)
+    start_zeit = models.DateTimeField()
+    end_zeit = models.DateTimeField()
+    kalender = models.ForeignKey(Calendar, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-class Timeslot(models.Model):
+    def __str__(self):
+        return self.title
+
+class Notification(models.Model):
     title = models.CharField(max_length=100)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    study_session = models.ForeignKey(StudySession, on_delete=models.CASCADE)
-    
-    def get_duration(self):
-        return self.end_time - self.start_time
+    nachricht = models.TextField()
+    datum = models.DateTimeField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    def clean(self):
-        if self.start_time >= self.end_time:
-            raise ValidationError("Startzeit muss vor Endzeit liegen")
+    def __str__(self):
+        return self.title
 
-class Exam(models.Model):
-    title = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True)
-    date = models.DateField()
-    time = models.TimeField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    time_slot = models.OneToOneField(Timeslot, on_delete=models.CASCADE)
+class Goal(models.Model):
+    name = models.CharField(max_length=100)
+    beschreibung = models.TextField(blank=True, null=True)
+    zielwert = models.IntegerField(default=0)
+    fortschritt = models.IntegerField(default=0)
+    kategorie = models.ForeignKey(Category, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+class Subject(models.Model):
+    name = models.CharField(max_length=100)
+    beschreibung = models.TextField(blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name

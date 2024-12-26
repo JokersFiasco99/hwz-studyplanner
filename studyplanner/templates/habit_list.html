@@ -1,18 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Habits</title>
+    <title>Meine Gewohnheiten</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        td, th {
+            border: 1px solid black;
+            padding: 8px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Deine Habits</h1>
-    <ul>
-        {% for habit in habit_list %}
-            <li>{{ habit.name }} - Status: {{ habit.status }}</li>
-        {% empty %}
-            <li>Keine Habits gefunden.</li>
+    <h1>Meine Gewohnheiten</h1>
+    
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Beschreibung</th>
+            <th>Fortschritt</th>
+            <th>Aktionen</th>
+        </tr>
+        {% for habit in habits %}
+            <tr>
+                <td>{{ habit.name }}</td>
+                <td>{{ habit.beschreibung }}</td>
+                <td>{{ habit.fortschritt }}/{{ habit.zielwert }}</td>
+                <td>
+                    <a href="{% url 'habit_update' habit.id %}">Bearbeiten</a>
+                    <a href="{% url 'habit_delete' habit.id %}">Löschen</a>
+                </td>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
+    
+    <br>
+    <a href="{% url 'habit_create' %}">Neue Gewohnheit</a>
 </body>
 </html>

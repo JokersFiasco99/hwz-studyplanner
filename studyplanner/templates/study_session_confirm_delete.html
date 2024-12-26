@@ -1,9 +1,17 @@
-<h1>Study Session löschen</h1>
-<p>Bist du sicher, dass du die folgende Study Session löschen möchtest?</p>
-<p><strong>{{ object.title }}</strong> (Start: {{ object.start_time }}, Ende: {{ object.end_time }})</p>
-
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Löschen</button>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lernsitzung löschen</title>
+</head>
+<body>
+    <h1>Lernsitzung löschen</h1>
+    <p>Möchtest du die Lernsitzung "{{ object.title }}" wirklich löschen?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Löschen</button>
+    </form>
     <a href="{% url 'study_session_list' %}">Abbrechen</a>
-</form>
+</body>
+</html>

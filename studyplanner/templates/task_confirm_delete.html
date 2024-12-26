@@ -1,7 +1,17 @@
-<h1>Task löschen</h1>
-<p>Bist du sicher, dass du den Task "{{ object.title }}" löschen möchtest?</p>
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Löschen</button>
-</form>
-<a href="{% url 'task_list' %}">Abbrechen</a>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aufgabe löschen</title>
+</head>
+<body>
+    <h1>Aufgabe löschen</h1>
+    <p>Möchtest du die Aufgabe "{{ object.title }}" wirklich löschen?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Löschen</button>
+    </form>
+    <a href="{% url 'task_list' %}">Abbrechen</a>
+</body>
+</html>
